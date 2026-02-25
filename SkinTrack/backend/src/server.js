@@ -1,0 +1,41 @@
+const express = require('express');
+const cors = require('cors');
+require('express-async-errors');
+const connectDB = require('./config/db');
+const { port, clientUrl } = require('./config/env');
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
+app.use(
+  cors({
+    origin: clientUrl,
+    credentials: true
+  })
+);
+app.use(express.json());
+
+app.get('/api/health', (_req, res) => {
+  res.status(200).json({ message: 'SkinTrack API online.' });
+});
+
+app.use('/api', authRoutes);
+
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500).json({ message: 'Erro interno do servidor.' });
+});
+
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log(`Servidor rodando em http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('Falha ao iniciar servidor:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
