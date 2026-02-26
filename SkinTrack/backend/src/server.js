@@ -5,6 +5,14 @@ const connectDB = require('./config/db');
 const { port, clientUrl } = require('./config/env');
 const authRoutes = require('./routes/auth');
 
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
 const app = express();
 
 app.use(
@@ -34,6 +42,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Falha ao iniciar servidor:', error.message);
+    console.error(error);
     process.exit(1);
   }
 };
