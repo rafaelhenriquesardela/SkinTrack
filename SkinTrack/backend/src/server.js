@@ -5,6 +5,8 @@ const connectDB = require('./config/db');
 const { port, clientUrl } = require('./config/env');
 const authRoutes = require('./routes/auth');
 
+const normalizedClientUrl = /^https?:\/\//.test(clientUrl) ? clientUrl : `https://${clientUrl}`;
+
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Rejection:', reason);
 });
@@ -17,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: clientUrl,
+    origin: normalizedClientUrl,
     credentials: true
   })
 );
