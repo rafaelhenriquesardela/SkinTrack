@@ -3,7 +3,7 @@ services:
     name: skintrack-backend
     runtime: node
     plan: free
-    rootDir: backend
+    rootDir: SkinTrack/backend
     buildCommand: npm install
     startCommand: npm start
     autoDeploy: true
