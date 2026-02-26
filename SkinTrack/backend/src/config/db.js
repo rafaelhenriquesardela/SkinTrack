@@ -6,7 +6,10 @@ const connectDB = async () => {
     throw new Error('MONGODB_URI não configurado');
   }
 
-  await mongoose.connect(mongoUri);
+  console.log('Conectando ao MongoDB...');
+  await mongoose.connect(mongoUri, {
+    serverSelectionTimeoutMS: 15000
+  });
   console.log('MongoDB conectado com sucesso.');
 };
 
