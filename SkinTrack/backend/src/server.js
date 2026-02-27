@@ -5,7 +5,11 @@ const connectDB = require('./config/db');
 const { port, clientUrl } = require('./config/env');
 const authRoutes = require('./routes/auth');
 
-const normalizedClientUrl = /^https?:\/\//.test(clientUrl) ? clientUrl : `https://${clientUrl}`;
+const allowedOrigins = clientUrl
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+  .map((origin) => (/^https?:\/\//.test(origin) ? origin : `https://${origin}`));
 
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Rejection:', reason);
@@ -19,7 +23,17 @@ const app = express();
 
 app.use(
   cors({
-    origin: normalizedClientUrl,
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Origem não permitida pelo CORS.'));
+    },
     credentials: true
   })
 );
