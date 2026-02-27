@@ -34,6 +34,10 @@ const loginSchema = Joi.object({
   senha: Joi.string()
 }).or('password', 'senha');
 
+const resendVerificationSchema = Joi.object({
+  email: Joi.string().email().required()
+});
+
 const regenerateSchema = Joi.object({
   skinType: skinTypeRule,
   pele: skinTypeRule,
@@ -62,6 +66,7 @@ const normalizeQuizPayload = (body) => ({
 module.exports = {
   signupSchema,
   loginSchema,
+  resendVerificationSchema,
   regenerateSchema,
   normalizeQuizPayload
 };

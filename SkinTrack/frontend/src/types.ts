@@ -26,3 +26,8 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+
+export interface SignupResponse {
+  message: string;
+  email: string;
+}

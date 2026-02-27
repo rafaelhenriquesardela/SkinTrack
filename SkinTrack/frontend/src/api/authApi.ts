@@ -1,5 +1,5 @@
 import { http } from './http';
-import { AuthResponse, Concern, RoutinePreference, SkinType, User } from '../types';
+import { AuthResponse, Concern, RoutinePreference, SignupResponse, SkinType, User } from '../types';
 
 export interface SignupPayload {
   name: string;
@@ -12,7 +12,7 @@ export interface SignupPayload {
 }
 
 export const signup = async (payload: SignupPayload) => {
-  const { data } = await http.post<AuthResponse>('/signup', payload);
+  const { data } = await http.post<SignupResponse>('/signup', payload);
   return data;
 };
 

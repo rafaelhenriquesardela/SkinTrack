@@ -58,6 +58,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    emailVerified: {
+      type: Boolean,
+      default: false
+    },
+    emailVerificationTokenHash: {
+      type: String,
+      default: null
+    },
+    emailVerificationExpiresAt: {
+      type: Date,
+      default: null
+    },
     skinProfile: {
       type: skinProfileSchema,
       required: true

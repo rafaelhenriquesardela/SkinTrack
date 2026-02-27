@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { SignupPayload, signup } from '../api/authApi';
 import { Concern, RoutinePreference, SkinType } from '../types';
-import { useAuth } from '../hooks/useAuth';
 
 const skinTypeOptions: { label: string; value: SkinType }[] = [
   { label: 'Oleosa', value: 'oleosa' },
@@ -28,8 +27,8 @@ const routineOptions: { label: string; value: RoutinePreference }[] = [
 const SignupQuiz = () => {
   const [step, setStep] = useState(1);
   const [apiError, setApiError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
-  const { setSession } = useAuth();
 
   const {
     register,
@@ -70,10 +69,13 @@ const SignupQuiz = () => {
 
   const onSubmit = async (data: SignupPayload) => {
     setApiError('');
+    setSuccessMessage('');
     try {
       const response = await signup(data);
-      setSession(response.token, response.user);
-      navigate('/dashboard');
+      setSuccessMessage(response.message);
+      setTimeout(() => {
+        navigate('/');
+      }, 2500);
     } catch (error: any) {
       setApiError(error?.response?.data?.message || 'Erro ao criar conta.');
     }
@@ -196,6 +198,7 @@ const SignupQuiz = () => {
         )}
 
         {apiError && <p className="mt-4 text-sm text-rose-400">{apiError}</p>}
+        {successMessage && <p className="mt-4 text-sm text-emerald-400">{successMessage}</p>}
 
         <div className="mt-8 flex items-center justify-between">
           <button
